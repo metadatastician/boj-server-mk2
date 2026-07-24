@@ -19,9 +19,9 @@ set positional-arguments := true
 import? "build/contractile.just"
 
 # Project metadata — customize these
-project := "rsr-template-repo"
-OWNER := "hyperpolymath"
-REPO := "rsr-template-repo"
+project := "boj-server-mk2"
+OWNER := "metadatastician"
+REPO := "boj-server-mk2"
 version := "0.1.0"
 tier := "infrastructure"  # 1 | 2 | infrastructure
 
@@ -88,22 +88,13 @@ import? "build/just/assess.just"
 # Build the project (debug mode)
 build *args:
     @echo "Building {{project}} (debug)..."
-    # TODO: Replace with your build command
-    # Examples:
-    #   cargo build {{args}}                    # Rust
-    #   mix compile {{args}}                    # Elixir
-    #   zig build {{args}}                      # Zig
-    #   deno task build {{args}}                # Deno/ReScript
+    mix compile {{args}}
     @echo "Build complete"
 
 # Build in release mode with optimizations
 build-release *args:
     @echo "Building {{project}} (release)..."
-    # TODO: Replace with your release build command
-    # Examples:
-    #   cargo build --release {{args}}
-    #   MIX_ENV=prod mix compile {{args}}
-    #   zig build -Doptimize=ReleaseFast {{args}}
+    MIX_ENV=prod mix compile {{args}}
     @echo "Release build complete"
 
 # Build and watch for changes (requires entr or similar)
@@ -137,18 +128,7 @@ clean-all: clean
 # Run all tests
 test *args:
     #!/usr/bin/env bash
-    # A check that cannot fail is not a check. This recipe MUST be replaced at
-    # mint with the project's real test command; until then it fails loudly
-    # rather than printing "Tests passed!" over an empty run.
-    #
-    # Replace this whole body with one of:
-    #   cargo test --workspace {{args}}
-    #   mix test {{args}}
-    #   zig build test {{args}}
-    #   deno test {{args}}
-    echo "FAIL: \`just test\` has not been wired to a real test command yet." >&2
-    echo "      Edit the 'test' recipe in the Justfile before relying on this gate." >&2
-    exit 1
+    mix test {{args}}
 
 # Run tests with verbose output
 test-verbose:
@@ -186,11 +166,7 @@ aspect:
 # Run benchmarks (performance regression detection)
 bench:
     @echo "Running benchmarks..."
-    # TODO: Replace with your benchmark command. Examples:
-    #   cargo bench                           # Rust criterion
-    #   zig build bench                       # Zig benchmarks
-    #   mix run bench/benchmarks.exs          # Elixir benchee
-    #   deno bench                            # Deno bench
+    mix run bench/benchmarks.exs
     @echo "Benchmarks complete!"
 
 # Run readiness tests (Component Readiness Grade: D/C/B)
@@ -242,30 +218,17 @@ fix: fmt
 # Format all source files [reversible: git checkout]
 fmt:
     @echo "Formatting source files..."
-    # TODO: Replace with your formatter
-    # Examples:
-    #   cargo fmt
-    #   mix format
-    #   gleam format
-    #   deno fmt
+    mix format
 
 # Check formatting without changes
 fmt-check:
     @echo "Checking formatting..."
-    # TODO: Replace with your format check
-    # Examples:
-    #   cargo fmt --check
-    #   mix format --check-formatted
-    #   gleam format --check
+    mix format --check-formatted
 
 # Run linter
 lint:
     @echo "Linting source files..."
-    # TODO: Replace with your linter
-    # Examples:
-    #   cargo clippy -- -D warnings
-    #   mix credo --strict
-    #   gleam check
+    mix credo --strict
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # RUN & EXECUTE
@@ -273,8 +236,7 @@ lint:
 
 # Run the application
 run *args: build
-    # TODO: Replace with your run command
-    echo "Run not configured yet"
+    iex -S mix
 
 # Run with verbose output
 run-verbose *args: build
