@@ -1,0 +1,41 @@
+= BoJ-Server MK2 (Development Repository)
+:toc: macro
+:toclevels: 3
+:icons: font
+
+> **WARNING: This is a purely self-contained, experimental development repository for the MK2 architecture.**
+> The original `boj-server`, `chimichanga`, and `snifs` repositories are currently in production and must not be altered by work occurring in this repository.
+
+== Overview
+
+This repository represents the next-generation architecture for **BoJ-Server**. It transitions the orchestrator from a JavaScript runtime (Deno/Bun) to the **Erlang VM (BEAM)** via Elixir, and utilizes WebAssembly **SNIFs** (Safer Native Implemented Functions) for executing Idris2 domain logic.
+
+toc::[]
+
+== Core Architecture Shifts
+
+The MK2 architecture introduces three radical changes to the stack:
+
+1.  **Elixir Orchestrator (Burrito):** Replaces Deno/Bun, drastically simplifying the dependency chain (dropping `node_modules`) while retaining the BEAM's actor-model concurrency. Compiles to a single zero-dependency executable.
+2.  **Chimichanga Wasm Sandboxing:** Uses the `chimichanga` capability attenuation framework to run Idris2 cartridges in highly isolated `wasmex` sandboxes. Includes strict **Fuel Limits** to prevent infinite loops.
+3.  **Cap'n Proto (Zero-Copy):** Replaces JSON for data interchange across the Wasm boundary. Eliminates parsing overhead and memory allocations inside the sandbox.
+
+== Documentation & Specifications
+
+The core specifications that drive this MK2 environment can be found in the `docs/` folder:
+
+*   link:docs/ARCHITECTURE_MK2.md[ARCHITECTURE_MK2.md] - The formal MK2 specification and IoC constraint documentation.
+*   link:docs/DESIGN_JOURNAL.adoc[DESIGN_JOURNAL.adoc] - The historical log detailing exactly *why* these architectural decisions were made.
+*   link:docs/snifs_reference/README.adoc[SNIFs Reference] - Documentation harvested from the original SNIFs specification.
+
+== Cartridge Refactoring (Inversion of Control)
+
+To safely execute within a Wasm SNIF (which has zero OS capabilities), all existing cartridges must be refactored using the **Inversion of Control (IoC)** pattern. They must become pure mathematical functions that return "Action Blueprints" for the Elixir host to execute.
+
+See `docs/ARCHITECTURE_MK2.md` for full details on this constraint.
+
+== Repository Structure
+
+*   `/docs` - Specifications and design journals.
+*   `/components` - Reference components (like `chimichanga`) copied in for self-contained development.
+*   `/cartridges` - Reference domain cartridges harvested from the original pool for testing the IoC migration.

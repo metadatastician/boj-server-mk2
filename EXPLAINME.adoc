@@ -1,0 +1,10 @@
+= Explain Me: BoJ-Server MK2
+
+*What is this repository?*
+This is a secure, isolated development sandbox for building the next generation of the BoJ-Server orchestrator. Because the production `boj-server` and `chimichanga` repositories are active, all experimentation for the MK2 shift happens here.
+
+*Why the architectural shift?*
+The legacy system used JavaScript (Deno/Bun) to orchestrate Wasm modules. The MK2 architecture drops JavaScript entirely, opting for an Elixir/BEAM orchestrator. This reduces dependencies, fixes blocking OS issues, and provides incredible actor-model concurrency.
+
+*What is the SNIF constraint?*
+Cartridges in this MK2 setup run inside `chimichanga` (Munition) Wasm sandboxes. Because they have zero OS permissions (no network, no file access), they must be written as pure mathematical functions. They cannot "do" things; they can only ask the Elixir host to "do" things for them via Cap'n Proto Action Blueprints.

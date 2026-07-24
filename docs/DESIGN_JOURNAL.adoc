@@ -1,0 +1,62 @@
+= Design Journal: Evolution of BoJ-Server MK2
+:toc: macro
+:toclevels: 3
+:icons: font
+
+This journal captures the architectural dialogue and rationale behind the transition from the legacy `boj-server` infrastructure (Deno/Bun) to the **MK2** specification (Elixir/Chimichanga).
+
+toc::[]
+
+== 1. The Starting Point: Legacy Architecture
+
+The original `boj-server` utilized a JavaScript-based orchestrator (Deno and Bun) to coordinate a massive suite of Idris2-based cartridges.
+*   **The Problem:** The JS ecosystem brought significant operational drag (npm/pnpm lockfile conflicts, Windows `winget` blocking issues with `deno.exe`, and a heavy runtime). 
+*   **The Goal:** We needed a standalone, compiled architecture that minimized the supply-chain footprint while scaling horizontally to support agentic and neuro-symbolic logic.
+
+== 2. The Great Pivot: Elixir over JavaScript
+
+**Question: Why did we drop Deno and Bun?**
+Because the overarching system already utilized Elixir for scaling (the "multiplier power"). Maintaining two massive orchestration runtimes (BEAM/Erlang + V8/JS) was a waste of cognitive load. By choosing Elixir as the single orchestrator, we dropped `package.json`, `node_modules`, and the entire TS compiler from the stack.
+
+**Decision: Standalone Compilation with Burrito**
+To ensure users aren't burdened with installing Erlang/Elixir, we elected to use **Burrito** (which leverages Zig under the hood) to compile the Elixir MK2 Orchestrator into a single, zero-dependency executable (`.exe` on Windows, ELF on Linux, Mach-O on Mac).
+
+== 3. Safer Native Implemented Functions (SNIFs)
+
+To safely run the Idris2 cartridges inside Elixir, we adopted the **SNIF (Safer Native Implemented Functions)** architecture via WebAssembly.
+
+**Question: Why SNIFs instead of NIFs?**
+Standard Elixir NIFs (written in C or Rust) can panic or segfault, which instantly crashes the entire Erlang VM (taking down all active actors). Wasm SNIFs run in a hyper-isolated sandbox. If the Idris2 cartridge crashes, it just safely traps, allowing Elixir to drop the request and keep the server running.
+
+== 4. The Chimichanga Discovery
+
+While drafting the SNIFs V2 spec, we reviewed the local `chimichanga` repository (Munition). 
+**Discovery:** `chimichanga` already implemented the exact capability attenuation framework we needed!
+It provides:
+1.  **Bounded Execution (Fuel):** Every Wasm instruction costs "fuel". Infinite loops are impossible.
+2.  **Memory Isolation:** No state leakage between executions.
+3.  **Forensic Capture:** Atomic dumps on failure.
+
+**Decision:** `chimichanga` is formally adopted as the Wasm sandbox engine for MK2.
+
+== 5. The Zero-Copy Data Boundary (Cap'n Proto)
+
+**Question: How do the Elixir Host and Idris2 Wasm Guest communicate efficiently?**
+JSON serialization was deemed too slow and memory-heavy for constrained Wasm sandboxes. We evaluated Protobuf and Bebop3, but both required the Wasm guest to parse data into new memory objects.
+
+**Decision: Cap'n Proto.**
+As a true "Zero-Copy" protocol, the Elixir host writes Cap'n Proto bytes directly into the Wasm linear memory. The Idris2 cartridge casts pointers over those bytes and reads them instantly without parsing. This eliminates the "marshalling tax."
+
+== 6. The Hard Constraint: Inversion of Control (IoC)
+
+The most painful but necessary realization of the MK2 shift is the **Cartridge Migration Cost**.
+
+**The Problem:** Wasm sandboxes (`wasm32-freestanding`) have no OS access. Existing cartridges that used `fetch()` or read files will fatal-crash.
+
+**The Solution:** All cartridges must be rewritten to the **Inversion of Control** pattern. They must become purely mathematical functions (Functional Core). 
+1.  Elixir fetches the data.
+2.  Elixir passes the data to the SNIF.
+3.  The SNIF returns a Cap'n Proto "Action Blueprint".
+4.  Elixir executes the side-effect (Imperative Shell).
+
+This architecture guarantees mathematical correctness and absolute fault tolerance, but it demands a complete rewrite of all I/O logic in the domain cartridges.
