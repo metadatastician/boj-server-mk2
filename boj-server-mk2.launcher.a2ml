@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: MPL-2.0
+# Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+#
+# boj-server-mk2.launcher.a2ml — per-app launcher config for BOJ Server MK2.
+# Compliant with launcher-standard.a2ml v0.3.0
+
+[project]
+name         = "boj-server-mk2"
+display      = "BOJ Server MK2"
+description  = "Server"
+categories   = ["Development", "System"]
+version      = "0.1.0"
+license      = "MPL-2.0"
+
+[repo]
+path = ""
+
+[runtime]
+kind = "server-url"
+port = 3000
+url  = "http://localhost:3000"
+startup-command-search = [
+    "{repo-dir}/target/release/boj-server",
+    "{repo-dir}/boj-server",
+    "boj-server",
+]
+pid-file = "${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}/boj-server-mk2.pid"
+log-file = "${XDG_STATE_HOME:-$HOME/.local/state}/boj-server-mk2/server.log"
+wait-for-url-timeout-seconds = 15
+
+[version-output]
+first-line-format = "boj-server-mk2 {version} ({build-sha-short}) [{platform}]"
+example = "boj-server-mk2 0.1.0 (abc1234) [linux-x86_64]"
+exit-code = 0
+
+[icon]
+source = "{repo-dir}/assets/icon-256.png"
