@@ -4,7 +4,7 @@
 # STATE.a2ml — Project state checkpoint (META-TEMPLATE)
 #
 # This is the STATE file for boj-server-mk2 itself.
-# When consumed by a new project, replace {{PLACEHOLDER}} tokens
+# When consumed by a new project, replace placeholder tokens
 # and customize sections below for the target project.
 
 [metadata]
