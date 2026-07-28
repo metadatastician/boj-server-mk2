@@ -59,6 +59,6 @@ depends-on = ["stapeln", "selur-compose", "cerro-torre", "svalinn", "vordr", "k9
 
 # ---------------------------------------------------------------------------
 # NOTE FOR CONSUMERS: When using this template to create a new repo, reset
-# the fields above to your project's values and replace all {{PLACEHOLDER}}
+# the fields above to your project's values and replace all placeholder
 # tokens. The milestones above describe the TEMPLATE's evolution, not yours.
 # ---------------------------------------------------------------------------
