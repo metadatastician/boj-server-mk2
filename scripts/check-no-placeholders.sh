@@ -107,6 +107,7 @@ ALLOWED=(
     "EXPLAINME.adoc"                           # prose explaining that tokens exist
     "scripts/check-no-placeholders.sh"         # this file (the pattern above)
     "tests/e2e/template_instantiation_test.sh" # names tokens in its answer list
+    ".github/settings.yml"                     # has its OWN, stricter check above
 )
 
 is_allowed() {

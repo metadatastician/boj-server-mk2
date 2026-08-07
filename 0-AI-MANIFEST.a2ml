@@ -5,11 +5,11 @@
 #
 [metadata]
 version = "0.1.0"
-last-updated = "{{CURRENT_DATE}}"
+last-updated = "2026-08-05"
 
 [project]
-name = "[YOUR-REPO-NAME]"
-purpose = "{{PROJECT_DESCRIPTION}}"
+name = "BoJ Server Mk2"
+purpose = "Next-generation architecture for BoJ-Server. Transitions orchestrator from JavaScript to Erlang VM (BEAM) via Elixir, with Chimichanga Wasm sandboxing for Idris2 cartridges."
 
 [ai-allocation]
 agents = [
