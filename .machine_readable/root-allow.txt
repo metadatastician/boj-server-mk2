@@ -78,3 +78,21 @@ tools/                     # TODO: consolidate with scripts/ or document the spl
 ARCHITECTURE.md            # repo layout + design rationale; shipped at root
 GOVERNANCE.md              # GitHub renders .md natively; ships alongside GOVERNANCE.adoc
 MAINTAINERS                # plain-text roster shipped alongside MAINTAINERS.adoc
+
+# ─── Declared 2026-08-06: entries the RSR template's directory map did
+#     not anticipate. The template targets a documentation repository;
+#     these are this project's real top-level shape. Moving them would
+#     break every path that references them, to satisfy a map that was
+#     never written for it. Read from the estate-rules gate's own output.
+.formatter.exs                # Project file that must remain at the repository root.
+.oikos.yml                    # Root-level configuration.
+CODE_OF_CONDUCT.md            # Project documentation.
+bench/                        # Top-level component directory of this project.
+boj-server-mk2-launcher.sh    # Root-level helper script.
+boj-server-mk2.launcher.a2ml  # Machine-readable manifest.
+cartridges/                   # Cartridge sources.
+components/                   # Top-level component directory of this project.
+lib/                          # Top-level component directory of this project.
+mix.exs                       # Project file that must remain at the repository root.
+mix.lock                      # Dependency lockfile — must sit beside its manifest.
+test/                         # Top-level component directory of this project.
