@@ -23,7 +23,7 @@ defmodule BojServerMk2.MixProject do
     [
       {:burrito, "~> 1.0"},
       {:benchee, "~> 1.0", only: :dev},
-      {:wasmex, "~> 0.14.0"}
+      {:wasmex, "~> 0.15.1"}
     ]
   end
 end
