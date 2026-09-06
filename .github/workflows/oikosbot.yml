@@ -25,7 +25,7 @@ jobs:
       # pinned has never existed on the package, so the job died at container
       # pull, and the failure was masked. Config comes from .oikos.yml.
       - name: Run OikosBot analysis
-        uses: hyperpolymath/oikosbot@f00dec4597dde6071a7f0fe38414c13b5847f316  # v0.1.0
+        uses: hyperpolymath/oikosbot@3fdad0c2b027f328e784ecf08caf62bf80a784c1  # v0.1.0
         with:
           mode: report
           path: .
@@ -33,7 +33,7 @@ jobs:
 
       - name: Upload SARIF to GitHub Security
         if: always()
-        uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v3
+        uses: github/codeql-action/upload-sarif@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v3
         with:
           sarif_file: results.sarif
           category: oikosbot
