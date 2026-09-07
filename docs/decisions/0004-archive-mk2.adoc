@@ -1,0 +1,33 @@
+// SPDX-License-Identifier: CC-BY-SA-4.0
+= ADR 0004: Archive MK2 and concentrate on the original BoJ projects
+
+Date: 2026-09-07
+
+Status: Accepted
+
+== Decision
+
+Preserve this repository as a public, read-only archive. Concentrate active
+development on https://github.com/hyperpolymath/boj-server[boj-server] and
+https://github.com/hyperpolymath/boj-server-cartridges[boj-server-cartridges].
+
+== Rationale
+
+The original server already provides an Elixir/OTP foundation and substantial
+protocol and cartridge infrastructure. The MK2 repository documents a broader
+replacement architecture but does not implement a replacement server.
+
+Requiring all cartridges to adopt Idris2/Wasm, a new serialization boundary,
+and inverted side-effect handling would combine several unvalidated workstreams.
+Current priorities are to verify and improve the original execution paths and
+cartridge behaviour, then introduce architectural changes behind stable contracts.
+
+== Consequences
+
+This repository receives no further active feature development. Its history and
+design material remain available for reference. Future use of Wasm isolation,
+explicit effects, or different packaging should be justified by a bounded
+implementation and evidence of benefit in the original projects.
+
+Historical specifications and inherited template maturity metadata do not
+establish implementation, proof, deployment, or production readiness.
