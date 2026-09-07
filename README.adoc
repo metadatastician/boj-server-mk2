@@ -1,48 +1,44 @@
-= BoJ-Server MK2 (Development Repository)
+// SPDX-License-Identifier: CC-BY-SA-4.0
+= BoJ Server MK2 — Archived
 :toc: macro
-:toclevels: 3
-:icons: font
 
-// Compliance
-image:https://img.shields.io/badge/SOC_3-Compliant-brightgreen[SOC 3 Compliant,link=https://github.com/organizations/metadatastician/settings/compliance]
-image:https://img.shields.io/badge/ISO_27001-Compliant-blue[ISO 27001 Compliant,link=https://github.com/organizations/metadatastician/settings/compliance]
-image:https://img.shields.io/badge/CIAQ-Compliant-9f55ff[CIAQ Compliant,link=https://github.com/organizations/metadatastician/settings/compliance]
-image:https://api.scorecard.dev/projects/github.com/metadatastician/boj-server-mk2/badge[OpenSSF Scorecard,link="https://scorecard.dev/viewer/?uri=github.com/metadatastician/boj-server-mk2"]
-nimage:https://www.bestpractices.dev/projects/8509/badge[OpenSSF Best Practices,link="https://www.bestpractices.dev/projects/8509"]
+*Archived on 7 September 2026.* Development is concentrating on the original
+https://github.com/hyperpolymath/boj-server[BoJ server] and the canonical
+https://github.com/hyperpolymath/boj-server-cartridges[BoJ cartridge registry].
 
-> **WARNING: This is a purely self-contained, experimental development repository for the MK2 architecture.**
-> The original `boj-server`, `chimichanga`, and `snifs` repositories are currently in production and must not be altered by work occurring in this repository.
+This public archive preserves an experimental architecture proposal and its
+reference material. It is not a supported replacement for the original server.
 
-== Overview
+== Why we are concentrating on the original
 
-This repository represents the next-generation architecture for **BoJ-Server**. It transitions the orchestrator from a JavaScript runtime (Deno/Bun) to the **Erlang VM (BEAM)** via Elixir, and utilizes WebAssembly **SNIFs** (Safer Native Implemented Functions) for executing Idris2 domain logic.
+The original BoJ server already contains an Elixir/OTP host, supervision,
+cartridge dispatch, and working protocol components. Our priority is to make
+those execution paths dependable, verify advertised cartridge capabilities,
+and improve the existing architecture incrementally.
 
-toc::[]
+The MK2 proposal coupled several changes: a new host, universal Idris2/Wasm
+cartridge execution, Cap'n Proto at the guest boundary, and a rewrite of
+cartridge side effects. The implementation and comparative evidence do not
+currently justify that combined migration effort.
 
-== Core Architecture Shifts
+Useful ideas from this exploration — explicit execution contracts,
+host-authorised effects, resource limits, and selective Wasm isolation — may
+still be adopted in the original projects when their benefits are demonstrated.
+They do not require a wholesale cartridge rewrite.
 
-The MK2 architecture introduces three radical changes to the stack:
+== Where to contribute
 
-1.  **Elixir Orchestrator (Burrito):** Replaces Deno/Bun, drastically simplifying the dependency chain (dropping `node_modules`) while retaining the BEAM's actor-model concurrency. Compiles to a single zero-dependency executable.
-2.  **Chimichanga Wasm Sandboxing:** Uses the `chimichanga` capability attenuation framework to run Idris2 cartridges in highly isolated `wasmex` sandboxes. Includes strict **Fuel Limits** to prevent infinite loops.
-3.  **Cap'n Proto (Zero-Copy):** Replaces JSON for data interchange across the Wasm boundary. Eliminates parsing overhead and memory allocations inside the sandbox.
+* https://github.com/hyperpolymath/boj-server[boj-server]: host, transports,
+  execution lifecycle, integration tests, and deployment.
+* https://github.com/hyperpolymath/boj-server-cartridges[boj-server-cartridges]:
+  cartridge implementations, manifests, authoring tools, and capability tests.
 
-== Documentation & Specifications
+== Historical material
 
-The core specifications that drive this MK2 environment can be found in the `docs/` folder:
+* link:docs/ARCHITECTURE_MK2.md[MK2 architecture proposal]
+* link:docs/DESIGN_JOURNAL.adoc[Design journal]
+* link:docs/decisions/0004-archive-mk2.adoc[Archival decision]
 
-*   link:docs/ARCHITECTURE_MK2.md[ARCHITECTURE_MK2.md] - The formal MK2 specification and IoC constraint documentation.
-*   link:docs/DESIGN_JOURNAL.adoc[DESIGN_JOURNAL.adoc] - The historical log detailing exactly *why* these architectural decisions were made.
-*   link:docs/snifs_reference/README.adoc[SNIFs Reference] - Documentation harvested from the original SNIFs specification.
-
-== Cartridge Refactoring (Inversion of Control)
-
-To safely execute within a Wasm SNIF (which has zero OS capabilities), all existing cartridges must be refactored using the **Inversion of Control (IoC)** pattern. They must become pure mathematical functions that return "Action Blueprints" for the Elixir host to execute.
-
-See `docs/ARCHITECTURE_MK2.md` for full details on this constraint.
-
-== Repository Structure
-
-*   `/docs` - Specifications and design journals.
-*   `/components` - Reference components (like `chimichanga`) copied in for self-contained development.
-*   `/cartridges` - Reference domain cartridges harvested from the original pool for testing the IoC migration.
+These documents record the experiment's proposed design. Statements about
+completion, mathematical correctness, zero-copy execution, or fault tolerance
+in historical material are not current implementation or assurance claims.
