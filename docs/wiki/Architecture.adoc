@@ -1,14 +1,17 @@
-> **Note:** This documentation reflects the provisional/planned design for the `boj-server-mk2` architecture. Many components (e.g., Elixir orchestration, Idris2 cartridges) are subject to change as the MK2 specification evolves.
+= BoJ Server Architecture
 
-# BoJ Server Architecture
+[NOTE]
+====
+This documentation reflects the provisional/planned design for the `boj-server-mk2` architecture. Many components (e.g., Elixir orchestration, Idris2 cartridges) are subject to change as the MK2 specification evolves.
+====
 
-## Overview
+== Overview
 
 BoJ Server is a cartridge-based tool server that provides unified access to tools across the hyperpolymath ecosystem. It acts as the bridge between AI agents (Claude, etc.) and the tool ecosystem.
 
-## System Design
+== System Design
 
-```
+....
 ┌─────────────────────────────────────────────────────┐
 │  AI Agent (Claude Code, PanLL, etc.)                │
 │                    │ MCP Protocol                    │
@@ -31,13 +34,14 @@ BoJ Server is a cartridge-based tool server that provides unified access to tool
 │  ├── ML (HuggingFace model access)                  │
 │  └── ... (50+ cartridges planned)                   │
 └─────────────────────────────────────────────────────┘
-```
+....
 
-## Cartridge Structure
+== Cartridge Structure
 
 Each cartridge is a Deno module that implements:
 
-```typescript
+[source,typescript]
+----
 interface Cartridge {
   name: string;
   description: string;
@@ -45,29 +49,33 @@ interface Cartridge {
   setup(): Promise<void>;
   teardown(): Promise<void>;
 }
-```
+----
 
-## CRG (Cartridge Readiness Grade)
+== CRG (Cartridge Readiness Grade)
 
-| Grade | Level | Requirements |
-|-------|-------|-------------|
-| D | Alpha | Skeleton + basic tests |
-| C | Beta | Integration tests, CI wired |
-| B | RC | Benchmarks, docs, bindings |
-| A | Production | Formally verified ABI, full coverage |
+[cols="1,1,3",options="header"]
+|===
+| Grade | Level | Requirements
+| D | Alpha | Skeleton + basic tests
+| C | Beta | Integration tests, CI wired
+| B | RC | Benchmarks, docs, bindings
+| A | Production | Formally verified ABI, full coverage
+|===
 
-## Integration Points
+== Integration Points
 
-- **PanLL** — Panels call BoJ cartridges via PanelBus
-- **Claude Code** — MCP tools exposed to Claude
-- **Hypatia** — Security scanning via panic-attack cartridge
-- **VeriSimDB** — Data operations via database cartridge
-- **Gossamer** — Desktop integration
+* *PanLL* — Panels call BoJ cartridges via PanelBus
+* *Claude Code* — MCP tools exposed to Claude
+* *Hypatia* — Security scanning via panic-attack cartridge
+* *VeriSimDB* — Data operations via database cartridge
+* *Gossamer* — Desktop integration
 
-## Ports
+== Ports
 
-| Service | Port |
-|---------|------|
-| BoJ Server | 3007 |
-| VeriSimDB (BoJ data) | 8094 |
-| ECHIDNA | 9000 |
+[cols="2,1",options="header"]
+|===
+| Service | Port
+| BoJ Server | 3007
+| VeriSimDB (BoJ data) | 8094
+| ECHIDNA | 9000
+|===

@@ -35,7 +35,7 @@ They do not require a wholesale cartridge rewrite.
 
 == Historical material
 
-* link:docs/ARCHITECTURE_MK2.md[MK2 architecture proposal]
+* link:docs/ARCHITECTURE_MK2.adoc[MK2 architecture proposal]
 * link:docs/DESIGN_JOURNAL.adoc[Design journal]
 * link:docs/decisions/0004-archive-mk2.adoc[Archival decision]
 
