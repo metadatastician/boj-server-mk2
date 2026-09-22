@@ -1,0 +1,69 @@
+= Getting Started with BoJ Server
+
+[NOTE]
+====
+This documentation reflects the provisional/planned design for the `boj-server-mk2` architecture. Many components (e.g., Elixir orchestration, Idris2 cartridges) are subject to change as the MK2 specification evolves.
+====
+
+== What is BoJ?
+
+BoJ (Bag of Jobs) is a cartridge-based MCP (Model Context Protocol) server. It provides tool access to AI agents and PanLL panels through a unified interface.
+
+== Prerequisites
+
+* *Deno* (runtime)
+* *just* (task runner)
+
+== Installation
+
+[source,bash]
+----
+git clone https://github.com/hyperpolymath/boj-server.git
+cd boj-server
+just setup
+----
+
+== First Run
+
+[source,bash]
+----
+deno task start    # Start BoJ server on port 3007
+----
+
+Verify: `curl http://localhost:3007/health`
+
+== Key Concepts
+
+=== Cartridges
+A cartridge is a pluggable tool module. Each cartridge:
+
+* Has a unique name and capability set
+* Supports one or more protocols (MCP, LSP, DAP, gRPC, REST, GraphQL)
+* Can be loaded/unloaded at runtime
+* Has a Cartridge Readiness Grade (D through A)
+
+=== Protocol Support
+[cols="1,3",options="header"]
+|===
+| Protocol | Purpose
+| MCP | Model Context Protocol (primary)
+| REST | HTTP API access
+| gRPC | High-performance RPC
+| GraphQL | Flexible queries
+| LSP | Language Server Protocol
+| DAP | Debug Adapter Protocol
+|===
+
+== Self-Diagnostic
+
+[source,bash]
+----
+just doctor    # Check all services and dependencies
+just heal      # Auto-repair common issues
+----
+
+== Next Steps
+
+* link:Architecture.adoc[Architecture] — System design
+* link:Guides.adoc[Guides] — Cartridge development
+* link:FAQ.adoc[FAQ] — Common questions
